@@ -37,18 +37,27 @@ function DropdownEditMenu({ children, align, ...rest }) {
     <div {...rest}>
       <button
         ref={trigger}
-        className={`bg-white text-slate-400 hover:text-slate-500 rounded-full ${
-          dropdownOpen && "bg-slate-100 text-slate-500"
+        className={`rounded text-gray-500 hover:bg-gray-200 hover:text-gray-700  ${
+          dropdownOpen &&
+          "bg-gray-200 text-gray-700 rounded flex w-5 h-5 items-center justify-center"
         }`}
         aria-haspopup="true"
         onClick={() => setDropdownOpen(!dropdownOpen)}
         aria-expanded={dropdownOpen}
       >
         <span className="sr-only">Menu</span>
-        <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
+        {/* <svg className="w-8 h-8 fill-current" viewBox="0 0 32 32">
           <circle cx="16" cy="16" r="2" />
           <circle cx="10" cy="16" r="2" />
           <circle cx="22" cy="16" r="2" />
+        </svg> */}
+        <svg
+          className="w-4 h-4 fill-current"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+        >
+          <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
         </svg>
       </button>
       <Transition
@@ -68,6 +77,7 @@ function DropdownEditMenu({ children, align, ...rest }) {
           ref={dropdown}
           onFocus={() => setDropdownOpen(true)}
           onBlur={() => setDropdownOpen(false)}
+          className="w-28"
         >
           {children}
         </ul>

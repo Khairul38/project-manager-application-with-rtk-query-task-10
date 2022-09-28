@@ -31,7 +31,7 @@ const Teams = () => {
   } else if (!isLoading && !isError && data?.length === 0) {
     content = <div className="m-2">No teams found</div>;
   } else if (!isLoading && !isError && data?.length > 0) {
-    content = data.map((team) => <Team key={team.id} team={team} />);
+    content = data.map((team) => <Team key={team.id} team={team} loggedInUser={user} />);
   }
 
   return (

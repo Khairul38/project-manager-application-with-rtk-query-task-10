@@ -22,7 +22,7 @@ const AddTeamModal = ({ opened, controlModal }) => {
       teamName,
       teamColor,
       description,
-      members: [loggedInUser],
+      members: [loggedInUser.email],
       creator: loggedInUser,
       date: new Date(),
     });
