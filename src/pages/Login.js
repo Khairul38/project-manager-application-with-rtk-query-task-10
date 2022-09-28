@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Error from "../components/ui/Error";
+import Spinner from "../components/ui/Spinner";
 import { useLoginMutation } from "../features/auth/authApi";
 import logoImage from "../images/logo.png";
 
@@ -100,7 +101,7 @@ const Login = () => {
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
               >
-                Sign in
+                {isLoading ? <Spinner w="5" h="5" /> : "Sign in"}
               </button>
             </div>
             {error !== "" && <Error message={error} />}

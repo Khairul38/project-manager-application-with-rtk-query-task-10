@@ -4,6 +4,7 @@ import AddTeamModal from "../components/modals/AddTeamModal";
 import Navigation from "../components/Navigation";
 import Team from "../components/Team";
 import Error from "../components/ui/Error";
+import Spinner from "../components/ui/Spinner";
 import { useGetTeamsQuery } from "../features/teams/teamsApi";
 
 const Teams = () => {
@@ -21,17 +22,19 @@ const Teams = () => {
   let content = null;
 
   if (isLoading) {
-    content = <div className="m-2">Loading...</div>;
+    content = <Spinner w="8" h="8" />;
   } else if (!isLoading && isError) {
     content = (
-      <div className="m-2">
+      <div>
         <Error message={error?.data} />
       </div>
     );
   } else if (!isLoading && !isError && data?.length === 0) {
-    content = <div className="m-2">No teams found</div>;
+    content = <div>No teams found</div>;
   } else if (!isLoading && !isError && data?.length > 0) {
-    content = data.map((team) => <Team key={team.id} team={team} loggedInUser={user} />);
+    content = data.map((team) => (
+      <Team key={team.id} team={team} loggedInUser={user} />
+    ));
   }
 
   return (
