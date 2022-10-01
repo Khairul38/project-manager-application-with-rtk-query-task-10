@@ -36,7 +36,7 @@ const AddProjectModal = ({
       controlModal();
       setSelectedTeam({});
       setDescription("");
-      notify();
+      notify("Project added successfully");
     }
   };
 

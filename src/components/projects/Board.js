@@ -1,9 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useUpdateProjectMutation } from "../../features/projects/projectsApi";
 import Column from "./Column";
 
-const Board = ({ controlModal, projects }) => {
+const Board = ({ controlModal, projects, notify }) => {
+  
   const [boardProjects, setBoardProjects] = useState(projects);
+  const [updatedProject] = useUpdateProjectMutation();
+
+  useEffect(() => {
+    setBoardProjects(projects);
+  }, [projects]);
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -27,6 +34,11 @@ const Board = ({ controlModal, projects }) => {
     const result = [...sourceClone, ...destClone];
     // result[droppableSource.droppableId] = sourceClone;
     // result[droppableDestination.droppableId] = destClone;
+
+    updatedProject({
+      id: removed.id,
+      data: { stage: droppableDestination.droppableId },
+    });
 
     return result;
   };
@@ -86,6 +98,7 @@ const Board = ({ controlModal, projects }) => {
           boardProjects={boardProjects}
           stage="Backlog"
           controlModal={controlModal}
+          notify={notify}
         />
         <Column boardProjects={boardProjects} stage="Ready" />
         <Column boardProjects={boardProjects} stage="Doing" />

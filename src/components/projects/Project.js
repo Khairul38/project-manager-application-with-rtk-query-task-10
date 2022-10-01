@@ -2,10 +2,23 @@ import gravatarUrl from "gravatar-url";
 import moment from "moment";
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
+import { useSelector } from "react-redux";
+import { useDeleteProjectMutation } from "../../features/projects/projectsApi";
 import DropdownEditMenu from "../ui/DropdownEditMenu";
 
-const Project = ({ project, index }) => {
-  const { date, stage, description, team, creator } = project;
+const Project = ({ project, index, notify }) => {
+  const { id, date, stage, description, team, creator } = project;
+
+  const { user: loggedInUser } = useSelector((state) => state.auth);
+  const [deleteProject, { isLoading }] = useDeleteProjectMutation();
+
+  const handleDeleteProject = () => {
+    if (isLoading) {
+      deleteProject({ id, email: loggedInUser.email });
+      notify("Project deleted successfully");
+    }
+  };
+
   return (
     <Draggable index={index} draggableId={project.id.toString()}>
       {(provided) => (
@@ -22,7 +35,7 @@ const Project = ({ project, index }) => {
               className="absolute top-0 right-0 items-center justify-center hidden w-5 h-5 mt-3 mr-2 text-gray-500 rounded hover:bg-gray-200 hover:text-gray-700 group-hover:flex"
             >
               <li
-                // onClick={handleDeleteTeam}
+                onClick={handleDeleteProject}
                 className="font-medium text-sm text-rose-500 hover:text-rose-600 flex py-1 px-3 hover:bg-slate-100"
               >
                 Delete

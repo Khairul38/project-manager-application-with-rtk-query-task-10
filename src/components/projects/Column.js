@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
 import Project from "./Project";
 
-const Column = ({ boardProjects, stage, controlModal }) => {
+const Column = ({ boardProjects, stage, controlModal, notify }) => {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
@@ -51,7 +51,12 @@ const Column = ({ boardProjects, stage, controlModal }) => {
           </div>
           <div className="flex flex-col pb-2 pr-2.5 overflow-auto scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400 scrollbar-track-rounded-full scrollbar-thumb-rounded-full">
             {projects.map((project, index) => (
-              <Project key={project.id} index={index} project={project} />
+              <Project
+                key={project.id}
+                index={index}
+                project={project}
+                notify={notify}
+              />
             ))}
             {provided.placeholder}
           </div>

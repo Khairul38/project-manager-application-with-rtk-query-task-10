@@ -27,6 +27,8 @@ const Projects = () => {
     setOpened((prevState) => !prevState);
   };
 
+  const notify = (message) => toast.success(message);
+
   // decide what to render
   let content = null;
 
@@ -40,15 +42,9 @@ const Projects = () => {
     );
   } else if (!isLoading && !isError && projects?.length > 0) {
     content = (
-      <Board
-        controlModal={controlModal}
-        projects={projects}
-        // loggedInUser={loggedInUser}
-      />
+      <Board controlModal={controlModal} projects={projects} notify={notify} />
     );
   }
-
-  const notify = () => toast.success("Project added successfully");
 
   return (
     <>
@@ -73,9 +69,7 @@ const Projects = () => {
         getTeamsSuccess={getTeamsSuccess}
         notify={notify}
       />
-      <ToastContainer 
-      autoClose={3000} 
-      theme="colored" />
+      <ToastContainer autoClose={3000} theme="colored" />
     </>
   );
 };
