@@ -15,7 +15,7 @@ const AddTeamModal = ({ opened, controlModal }) => {
     if (isSuccess) {
       controlModal();
     }
-  }, [isSuccess]);
+  }, [isSuccess, controlModal]);
 
   const handleSubmit = (e) => {
     e.preventDefault();

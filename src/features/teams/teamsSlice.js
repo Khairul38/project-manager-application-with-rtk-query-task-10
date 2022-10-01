@@ -8,5 +8,5 @@ const teamsSlice = createSlice({
   reducers: {},
 });
 
-export const {} = teamsSlice.actions;
+// export const {} = teamsSlice.actions;
 export default teamsSlice.reducer;
