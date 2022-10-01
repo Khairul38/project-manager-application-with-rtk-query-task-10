@@ -49,8 +49,8 @@ const AddTeamModal = ({ opened, controlModal }) => {
           >
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
-                <label htmlFor="to" className="sr-only">
-                  To
+                <label htmlFor="name" className="sr-only">
+                  Name
                 </label>
                 <input
                   value={teamName}
