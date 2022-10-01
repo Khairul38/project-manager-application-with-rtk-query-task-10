@@ -32,9 +32,13 @@ const Teams = () => {
   } else if (!isLoading && !isError && data?.length === 0) {
     content = <div>No teams found</div>;
   } else if (!isLoading && !isError && data?.length > 0) {
-    content = data.map((team) => (
-      <Team key={team.id} team={team} loggedInUser={user} />
-    ));
+    content = (
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 px-10 mt-4 gap-6 overflow-auto">
+        {data.map((team) => (
+          <Team key={team.id} team={team} loggedInUser={user} />
+        ))}
+      </div>
+    );
   }
 
   return (
@@ -62,9 +66,7 @@ const Teams = () => {
             </svg>
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 px-10 mt-4 gap-6 overflow-auto">
-          {content}
-        </div>
+        {content}
       </div>
       <AddTeamModal opened={opened} controlModal={controlModal} />
     </>

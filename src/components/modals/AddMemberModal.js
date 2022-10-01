@@ -34,7 +34,9 @@ const AddMemberModal = ({ opened, controlModal, team }) => {
   const loadOption = (inputValue, callback) => {
     if (getUsersSuccess) {
       callback(
-        defaultOptions.filter((option) => option.label.includes(inputValue))
+        defaultOptions.filter((option) =>
+          option.label.toLowerCase().includes(inputValue.toLowerCase())
+        )
       );
     }
   };
@@ -76,10 +78,17 @@ const AddMemberModal = ({ opened, controlModal, team }) => {
                 onChange={(e) => setSelectedMember(e)}
                 noOptionsMessage={() => "Not found"}
                 loadingMessage={() => "Searching..."}
-                placeholder="Type email"
+                placeholder="Type/Select email"
                 backspaceRemovesValue={true}
                 hideSelectedOptions={true}
                 isSearchable={true}
+                theme={(theme) => ({
+                  ...theme,
+                  colors: {
+                    ...theme.colors,
+                    primary: "#8000ff",
+                  },
+                })}
               />
             </div>
 

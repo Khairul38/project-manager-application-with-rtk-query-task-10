@@ -1,5 +1,5 @@
 import gravatarUrl from "gravatar-url";
-import moment from "moment/moment";
+import moment from "moment";
 import React, { useState } from "react";
 import { useDeleteTeamMutation } from "../features/teams/teamsApi";
 import AddMemberModal from "./modals/AddMemberModal";

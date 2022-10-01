@@ -1,6 +1,45 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import Select from "react-select";
+import { useAddProjectMutation } from "../../features/projects/projectsApi";
+import Error from "../ui/Error";
+import Spinner from "../ui/Spinner";
 
-const AddProjectModal = ({ opened, controlModal }) => {
+const AddProjectModal = ({
+  opened,
+  controlModal,
+  loggedInUser,
+  teams,
+  getTeamsSuccess,
+  notify,
+}) => {
+  const [options, setOptions] = useState([]);
+  const [selectedTeam, setSelectedTeam] = useState({});
+  const [description, setDescription] = useState("");
+  const [addProject, { isLoading, isError }] = useAddProjectMutation();
+
+  useEffect(() => {
+    if (getTeamsSuccess) {
+      setOptions(teams.map((team) => ({ label: team.teamName, value: team })));
+    }
+  }, [getTeamsSuccess, teams]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (selectedTeam !== {} && description !== "") {
+      addProject({
+        team: selectedTeam.value,
+        description,
+        creator: loggedInUser,
+        stage: "Backlog",
+        date: new Date(),
+      });
+      controlModal();
+      setSelectedTeam({});
+      setDescription("");
+      notify();
+    }
+  };
+
   return (
     opened && (
       <>
@@ -14,55 +53,66 @@ const AddProjectModal = ({ opened, controlModal }) => {
           </h2>
           <form
             className="mt-8 space-y-6"
-            // onSubmit={handleSubmit}
-            // method="POST"
+            onSubmit={handleSubmit}
+            method="POST"
           >
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
-                <label htmlFor="to" className="sr-only">
-                  To
-                </label>
-                <input
-                  // onChange={debounce(doSearch, 500)}
-                  id="to"
-                  name="to"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
-                  placeholder="Send to"
+                <Select
+                  options={options}
+                  onChange={(e) => setSelectedTeam(e)}
+                  noOptionsMessage={() => "Not found"}
+                  placeholder="Type/Select team"
+                  backspaceRemovesValue={true}
+                  hideSelectedOptions={true}
+                  isSearchable={true}
+                  theme={(theme) => ({
+                    ...theme,
+                    colors: {
+                      ...theme.colors,
+                      primary: "#8000ff",
+                    },
+                  })}
                 />
               </div>
               <div>
-                <label htmlFor="message" className="sr-only">
-                  Message
+                <label htmlFor="description" className="sr-only">
+                  Description
                 </label>
                 <textarea
-                  // value={message}
-                  // onChange={(e) => setMessage(e.target.value)}
-                  id="message"
-                  name="message"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  id="description"
+                  name="description"
                   type="text"
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
-                  placeholder="Message"
+                  placeholder="Description"
                 />
               </div>
             </div>
 
-            <div>
+            <div className="flex gap-10">
+              <button
+                type="button"
+                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                onClick={() => {
+                  controlModal();
+                  setSelectedTeam({});
+                  setDescription("");
+                }}
+              >
+                Cancel
+              </button>
               <button
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
-                // disabled={
-                //   conversation === undefined ||
-                //   (participant?.length > 0 &&
-                //     participant[0].email === loggedInUser.email)
-                // }
+                disabled={isLoading}
               >
-                Add
+                {isLoading ? <Spinner w="5" h="5" /> : "Add"}
               </button>
             </div>
+            {isError && <Error message="There is an error" />}
           </form>
         </div>
       </>
