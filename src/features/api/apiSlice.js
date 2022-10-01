@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { userLoggedOut } from "../auth/authSlice";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:9000",
+  baseUrl: "https://fake-auth-api-json-server.onrender.com",
   prepareHeaders: async (headers, { getState, endPoints }) => {
     const token = getState()?.auth?.accessToken;
     if (token) {
