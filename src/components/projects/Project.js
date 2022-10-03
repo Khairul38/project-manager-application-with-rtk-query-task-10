@@ -7,15 +7,15 @@ import { useDeleteProjectMutation } from "../../features/projects/projectsApi";
 import DropdownEditMenu from "../ui/DropdownEditMenu";
 
 const Project = ({ project, index, notify }) => {
-  const { id, date, stage, description, team, creator } = project;
+  const { id, date, stage, description, team, creator, match } = project;
 
   const { user: loggedInUser } = useSelector((state) => state.auth);
   const [deleteProject, { isLoading }] = useDeleteProjectMutation();
 
   const handleDeleteProject = () => {
-    if (isLoading) {
+    if (!isLoading) {
       deleteProject({ id, email: loggedInUser.email });
-      notify("Project deleted successfully");
+      notify("Project Deleted Successfully");
     }
   };
 
@@ -26,7 +26,7 @@ const Project = ({ project, index, notify }) => {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 group hover:bg-opacity-100"
+          className={`relative flex flex-col items-start p-4 mt-3 bg-white rounded-lg cursor-pointer bg-opacity-90 group hover:bg-opacity-100 ${match && "border-2 border-indigo-600"}`}
           draggable="true"
         >
           {stage === "Backlog" && (
@@ -36,7 +36,7 @@ const Project = ({ project, index, notify }) => {
             >
               <li
                 onClick={handleDeleteProject}
-                className="font-medium text-sm text-rose-500 hover:text-rose-600 flex py-1 px-3 hover:bg-slate-100"
+                className="font-medium text-sm cursor-pointer text-rose-500 hover:text-rose-600 flex py-1 px-3 hover:bg-slate-100"
               >
                 Delete
               </li>

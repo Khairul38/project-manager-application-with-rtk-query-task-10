@@ -5,7 +5,7 @@ import { useDeleteTeamMutation } from "../features/teams/teamsApi";
 import AddMemberModal from "./modals/AddMemberModal";
 import DropdownEditMenu from "./ui/DropdownEditMenu";
 
-const Team = ({ team, loggedInUser }) => {
+const Team = ({ team, loggedInUser, notify }) => {
   const { id, teamName, teamColor, description, date, members } = team;
   const [opened, setOpened] = useState(false);
   const [deleteTeam, { isLoading }] = useDeleteTeamMutation();
@@ -17,6 +17,7 @@ const Team = ({ team, loggedInUser }) => {
   const handleDeleteTeam = () => {
     if (!isLoading) {
       deleteTeam({ id, email: loggedInUser.email });
+      notify("Team Deleted Successfully")
     }
   };
 
@@ -85,7 +86,12 @@ const Team = ({ team, loggedInUser }) => {
           </div>
         </div>
       </div>
-      <AddMemberModal opened={opened} controlModal={controlModal} team={team} />
+      <AddMemberModal
+        opened={opened}
+        controlModal={controlModal}
+        team={team}
+        notify={notify}
+      />
     </>
   );
 };

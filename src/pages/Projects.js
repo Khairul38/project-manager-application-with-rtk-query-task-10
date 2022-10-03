@@ -9,10 +9,13 @@ import { useGetProjectsQuery } from "../features/projects/projectsApi";
 import { useGetTeamsQuery } from "../features/teams/teamsApi";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { search } from "../features/projects/projectsSlice";
 
 const Projects = () => {
   const [opened, setOpened] = useState(false);
   const { user: loggedInUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const { data: teams, isSuccess: getTeamsSuccess } = useGetTeamsQuery(
     loggedInUser.email
   );
@@ -28,6 +31,20 @@ const Projects = () => {
   };
 
   const notify = (message) => toast.success(message);
+
+  const debounce = (fn, delay) => {
+    let timeoutId;
+    return (...args) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        fn(...args);
+      }, delay);
+    };
+  };
+
+  const handleSearch = (e) => {
+    dispatch(search(e.target.value));
+  };
 
   // decide what to render
   let content = null;
@@ -54,6 +71,7 @@ const Projects = () => {
             className="flex items-center h-10 px-4 ml-10 text-sm bg-gray-200 rounded-full focus:outline-none focus:ring"
             type="search"
             placeholder="Search for projects…"
+            onChange={debounce(handleSearch, 400)}
           />
         </Navigation>
         <div className="px-10 mt-6">

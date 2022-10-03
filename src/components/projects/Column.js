@@ -1,18 +1,33 @@
 import React, { useEffect, useState } from "react";
 import { Droppable } from "react-beautiful-dnd";
+import { useSelector } from "react-redux";
 import Project from "./Project";
 
 const Column = ({ boardProjects, stage, controlModal, notify }) => {
   const [projects, setProjects] = useState([]);
+  const { searchString } = useSelector((state) => state.projects);
+
+  const search = (searchString) => {
+    return (boardProject) => {
+      if (searchString.length === 0) {
+        return boardProject;
+      } else {
+        return boardProject.description
+          .toLowerCase()
+          .match(searchString.toLowerCase())
+          ? { ...boardProject, match: true }
+          : { ...boardProject, match: false };
+      }
+    };
+  };
 
   useEffect(() => {
-    const filteredProjects = boardProjects.filter(
-      (boardProject) => boardProject.stage === stage
-    );
+    const filteredProjects = boardProjects
+      .map(search(searchString))
+      .filter((boardProject) => boardProject.stage === stage);
     setProjects(filteredProjects);
-  }, [boardProjects, stage]);
+  }, [boardProjects, stage, searchString]);
 
-  // console.log(boardProjects, stage, projects);
   return (
     <Droppable droppableId={stage}>
       {(provided, snapshot) => (

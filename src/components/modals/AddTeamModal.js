@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useAddTeamMutation } from "../../features/teams/teamsApi";
 import Color from "../ui/Color";
 import Spinner from "../ui/Spinner";
 
-const AddTeamModal = ({ opened, controlModal }) => {
+const AddTeamModal = ({ opened, controlModal, notify }) => {
   const [teamName, setTeamName] = useState("");
   const [teamColor, setTeamColor] = useState("#F44336");
   const [description, setDescription] = useState("");
   const { user: loggedInUser } = useSelector((state) => state.auth);
-  const [addTeam, { isLoading, isSuccess }] = useAddTeamMutation();
+  const [addTeam, { isLoading }] = useAddTeamMutation();
 
-  useEffect(() => {
-    if (isSuccess) {
-      controlModal();
-    }
-  }, [isSuccess, controlModal]);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     controlModal();
+  //   }
+  // }, [isSuccess]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,6 +27,8 @@ const AddTeamModal = ({ opened, controlModal }) => {
       creator: loggedInUser,
       date: new Date(),
     });
+    controlModal();
+    notify("Team Added Successfully")
     setTeamName("");
     setTeamColor("#F44336");
     setDescription("");

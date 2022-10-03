@@ -4,7 +4,7 @@ import { useUpdateTeamMutation } from "../../features/teams/teamsApi";
 import { useGetUserQuery } from "../../features/users/usersApi";
 import Error from "../ui/Error";
 
-const AddMemberModal = ({ opened, controlModal, team }) => {
+const AddMemberModal = ({ opened, controlModal, team, notify }) => {
   const [defaultOptions, setDefaultOptions] = useState([]);
   const [selectedMember, setSelectedMember] = useState({});
   const [error, setError] = useState("");
@@ -50,6 +50,7 @@ const AddMemberModal = ({ opened, controlModal, team }) => {
         data: { members: [...team.members, selectedMember.value] },
       });
       controlModal();
+      notify("Add Member Successfully");
     } else {
       setError("Member already exist");
     }

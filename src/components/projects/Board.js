@@ -64,7 +64,6 @@ const Board = ({ controlModal, projects, notify }) => {
         source.index,
         destination.index
       );
-      console.log(items, [...filteredRestProjects, ...items]);
       setBoardProjects([...filteredRestProjects, ...items]);
     } else {
       const filteredSourceProjects = boardProjects.filter(

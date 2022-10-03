@@ -6,17 +6,19 @@ import Team from "../components/Team";
 import Error from "../components/ui/Error";
 import Spinner from "../components/ui/Spinner";
 import { useGetTeamsQuery } from "../features/teams/teamsApi";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Teams = () => {
   const [opened, setOpened] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const { data, isLoading, isError, error } = useGetTeamsQuery(user.email);
 
-  // console.log(data);
-
   const controlModal = () => {
     setOpened((prevState) => !prevState);
   };
+
+  const notify = (message) => toast.success(message);
 
   // decide what to render
   let content = null;
@@ -35,7 +37,7 @@ const Teams = () => {
     content = (
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 px-10 mt-4 gap-6 overflow-auto">
         {data.map((team) => (
-          <Team key={team.id} team={team} loggedInUser={user} />
+          <Team key={team.id} team={team} loggedInUser={user} notify={notify} />
         ))}
       </div>
     );
@@ -68,7 +70,12 @@ const Teams = () => {
         </div>
         {content}
       </div>
-      <AddTeamModal opened={opened} controlModal={controlModal} />
+      <AddTeamModal
+        opened={opened}
+        controlModal={controlModal}
+        notify={notify}
+      />
+      <ToastContainer autoClose={3000} theme="colored" />
     </>
   );
 };
